@@ -1,0 +1,23 @@
+{
+  "name": "basecamp-pid-builder",
+  "version": "0.0.1",
+  "description": "Automate creation of PIDs in Basecamp",
+  "main": "app.js",
+  "scripts": {
+    "test": "test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "github.com/cyhtan/basecamp-pid-builder"
+  },
+  "keywords": [
+    "Basecamp",
+    "YI",
+    "PID",
+    "SID",
+    "automate",
+    "workflow"
+  ],
+  "author": "Brendan Grady",
+  "license": "none"
+}

@@ -1,0 +1,37 @@
+{
+  "name": "Basecamp PID Builder",
+  "version": "0.0.1",
+  "homepage": "https://basecamp-pid-builder.herokuapp.com",
+  "authors": [
+    "Brendan Grady <cyhtan@gmail.com>"
+  ],
+  "description": "Build a custom PID builder app for YI to automate PID creation workflow",
+  "main": "app.js",
+  "moduleType": [
+    "amd",
+    "es6",
+    "node"
+  ],
+  "keywords": [
+    "YI",
+    "Basecamp",
+    "PID",
+    "SID",
+    "workflow",
+    "automation"
+  ],
+  "license": "none",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "backbone": "~1.2.1",
+    "underscore": "~1.8.3",
+    "jquery": "~2.1.4",
+    "handlebars": "~3.0.3"
+  }
+}
