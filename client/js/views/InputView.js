@@ -1,7 +1,6 @@
 var InputView = Backbone.View.extend({
 
-  tagName: 'input',
-  // el: '<input>',
+  tagName: 'form',
 
   events: {
     'keydown': 'keyAction',
@@ -12,7 +11,15 @@ var InputView = Backbone.View.extend({
   },
 
   render: function() {
-    this.resetInput();
+   this.$el.append([
+      '<input name="id">',
+      '<input name="date">',
+      '<input name="authors">',
+      '<input name="title">',
+      '<input name="isClass">',
+      '<input name="classLevel">',
+      '<input name="classTags">'
+    ]);
     return this;
   },
 
@@ -20,17 +27,15 @@ var InputView = Backbone.View.extend({
 
     var isEnterKey = (e.which === 13);
 
-    if(isEnterKey && !this.$el.val().trim().match(/^(?=.*[0-9].*)[0-9]{5}$/)) {
+    var values = {};
+    $.each(this.$el.serializeArray(), function(i, field) {
+        values[field.name] = field.value;
+    });
 
-      this.$el.attr({
-        placeholder: 'Sorry, zip code invalid.'
-      });
-      this.clearInput();
+    if(isEnterKey) {
 
-    } else if(isEnterKey) {
-
-      this.collection.addWeatherEntry(this.$el.val());
-      this.resetInput();
+      this.collection.addPIDEntry(values);
+      //this.resetInput();
 
     }
 

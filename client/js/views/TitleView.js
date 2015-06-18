@@ -7,7 +7,7 @@ var TitleView = Backbone.View.extend({
   },
 
   render: function() {
-    this.$el.text('How\'s the weather?');
+    this.$el.text('Create a new SID');
     return this;
   }
 
