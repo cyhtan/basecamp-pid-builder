@@ -1,6 +1,6 @@
 <html lang="en"><head>
   <meta charset="UTF-8">
-  <title>How's The SID?</title>
+  <title>Basecamp PID Builder</title>
   <link rel="stylesheet" href="css/bootstrap.min.css">
     <style>
     body {
@@ -53,26 +53,6 @@
               <div id="container">
                 <div id="app"></div>
               </div>
-                <h2>Write a New Entry</h2>
-                <form>
-                    <div class="form-group">
-                        <label for="inputStart">Start (Date and Time)*</label>
-                        <input type="datetime-local" class="form-control" id="inputStart" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="inputEnd">End (Date and Time)*</label>
-                        <input type="datetime-local" class="form-control" id="inputEnd" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="inputDescription">Description</label>
-                        <textarea class="form-control" rows="3" id="inputDescription"></textarea>
-                    </div>
-                    <div class="form-group">
-                        <label for="inputTags">Tags (Separate with commas) </label>
-                        <input type="text" class="form-control" id="inputTags">
-                    </div>
-                </form>
-                <p><em>*Required</em></p>
                 <button onclick="addEntry()" class="btn btn-primary">Save New Entry</button>
                 <div id="dateWarning" class="alert alert-danger" role="alert" style="display:none;margin-top:10px;">
                     <strong>Warning!</strong> Somethings wrong with those start and end dates.
@@ -82,16 +62,18 @@
                 </div>
             </div>
             <div class="col-md-8">
-                <h2>Your Entries</h2>
+                <h2>Your PID Entries</h2>
                 <p id="noEntryMessage" class="bg-info" style="padding:20px">Uh oh... You haven't written any PIDs yet. Basecamp Builder is feeling bored.</p>
                 <table id="entryTable" class="table table-hover" style="display:none;">
                     <thead>
                         <tr>
+                            <th>ID</th>
                             <th>Date</th>
-                            <th>Minutes</th>
-                            <th>Description</th>
-                            <th>Tags</th>
-                            <th></th>
+                            <th>Author(s)</th>
+                            <th>Title</th>
+                            <th>Class?</th>
+                            <th>Class Level</th>
+                            <th>Class Tags</th>
                         </tr>
                     </thead>
                     <tbody id="entryRows">

@@ -6,19 +6,21 @@ var InputView = Backbone.View.extend({
     'keydown': 'keyAction',
   },
 
+  formGroupTemplate: _.template('<div class="form-group"><label for="<%= id %>"><%= label %></label><input type="text" class="form-control" id="<%= id %>" name="<%= id %>"></div>'),
+
   initialize: function() {
     this.render();
   },
 
   render: function() {
    this.$el.append([
-      '<input name="id">',
-      '<input name="date">',
-      '<input name="authors">',
-      '<input name="title">',
-      '<input name="isClass">',
-      '<input name="classLevel">',
-      '<input name="classTags">'
+      this.formGroupTemplate({id:"id",label:"ID"}),
+      this.formGroupTemplate({id:"date",label:"Date"}),
+      this.formGroupTemplate({id:"authors",label:"Author(s)"}),
+      this.formGroupTemplate({id:"title",label:"Title"}),
+      this.formGroupTemplate({id:"isClass",label:"Is a Class? (True or False)"}),
+      this.formGroupTemplate({id:"classLevel",label:"Class Level"}),
+      this.formGroupTemplate({id:"classTags",label:"Class Tags"})
     ]);
     return this;
   },
@@ -35,21 +37,14 @@ var InputView = Backbone.View.extend({
     if(isEnterKey) {
 
       this.collection.addPIDEntry(values);
-      //this.resetInput();
+      this.clearInput();
 
     }
 
   },
 
-  resetInput: function() {
-    this.$el.attr({
-      placeholder: 'Enter a zip code'
-    });
-    this.clearInput();
-  },
-
   clearInput: function() {
-    this.$el.val('');
+    this.$el.trigger("reset");
   }
 
 });
