@@ -1,18 +1,27 @@
 var InputView = Backbone.View.extend({
 
-  tagName: 'input',
-  // el: '<input>',
+  tagName: 'form',
 
   events: {
     'keydown': 'keyAction',
   },
+
+  formGroupTemplate: _.template('<div class="form-group"><label for="<%= id %>"><%= label %></label><input type="text" class="form-control" id="<%= id %>" name="<%= id %>"></div>'),
 
   initialize: function() {
     this.render();
   },
 
   render: function() {
-    this.resetInput();
+   this.$el.append([
+      this.formGroupTemplate({id:"id",label:"ID"}),
+      this.formGroupTemplate({id:"date",label:"Date"}),
+      this.formGroupTemplate({id:"authors",label:"Author(s)"}),
+      this.formGroupTemplate({id:"title",label:"Title"}),
+      this.formGroupTemplate({id:"isClass",label:"Is a Class? (True or False)"}),
+      this.formGroupTemplate({id:"classLevel",label:"Class Level"}),
+      this.formGroupTemplate({id:"classTags",label:"Class Tags"})
+    ]);
     return this;
   },
 
@@ -20,31 +29,22 @@ var InputView = Backbone.View.extend({
 
     var isEnterKey = (e.which === 13);
 
-    if(isEnterKey && !this.$el.val().trim().match(/^(?=.*[0-9].*)[0-9]{5}$/)) {
+    var values = {};
+    $.each(this.$el.serializeArray(), function(i, field) {
+        values[field.name] = field.value;
+    });
 
-      this.$el.attr({
-        placeholder: 'Sorry, zip code invalid.'
-      });
+    if(isEnterKey) {
+
+      this.collection.addPIDEntry(values);
       this.clearInput();
-
-    } else if(isEnterKey) {
-
-      this.collection.addWeatherEntry(this.$el.val());
-      this.resetInput();
 
     }
 
   },
 
-  resetInput: function() {
-    this.$el.attr({
-      placeholder: 'Enter a zip code'
-    });
-    this.clearInput();
-  },
-
   clearInput: function() {
-    this.$el.val('');
+    this.$el.trigger("reset");
   }
 
 });

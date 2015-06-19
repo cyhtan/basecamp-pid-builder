@@ -1,17 +1,171 @@
-<!DOCTYPE html>
-<html lang="en">
-
-<head>
+<html lang="en"><head>
   <meta charset="UTF-8">
-  <title>How's The Weather</title>
-  <link rel="stylesheet" href="css/style.css">
+  <title>Basecamp PID Builder</title>
+  <link rel="stylesheet" href="css/bootstrap.min.css">
+    <style>
+    body {
+        padding-top: 50px;
+        padding-bottom: 20px;
+    }
+    </style>
+    <link rel="stylesheet" href="css/bootstrap-theme.min.css">
 </head>
 
 <body>
-
-  <div id="container">
-    <div id="app"></div>
-  </div>
+    <nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+        <div class="container">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a class="navbar-brand" href="#">Basecamp PID Builder</a>
+            </div>
+            <div id="navbar" class="navbar-collapse collapse">
+                <div id="loggedOutNav">
+                    <form class="navbar-form navbar-right" role="form" name="loginForm">
+                        <div class="form-group">
+                            <input id="logInEmail" type="text" placeholder="Email" class="form-control">
+                        </div>
+                        <div class="form-group">
+                            <input id="logInPass" type="password" placeholder="Password" class="form-control">
+                        </div>
+                        <button type="button" class="btn btn-success" onclick="logIn()">Sign in</button>
+                    </form>
+                </div>
+                <div id="loggedInNav" style="display:none">
+                    <form class="navbar-form navbar-right" role="form">
+                        <p class="navbar-text" style="margin-top:7px;margin-bottom:7px;">Welcome!</p>
+                        &nbsp;&nbsp;&nbsp;
+                        <button type="button" class="btn btn-danger" onclick="logOut()">Log Out</button>
+                    </form>
+                </div>
+            </div>
+            <!--/.navbar-collapse -->
+        </div>
+    </nav>
+    <div class="container">
+        <!-- Example row of columns -->
+        <div class="row">
+            <div class="col-md-4">
+              <div id="container">
+                <div id="app"></div>
+              </div>
+                <button onclick="addEntry()" class="btn btn-primary">Save New Entry</button>
+                <div id="dateWarning" class="alert alert-danger" role="alert" style="display:none;margin-top:10px;">
+                    <strong>Warning!</strong> Somethings wrong with those start and end dates.
+                </div>
+                <div id="entrySuccess" class="alert alert-success" role="alert" style="display:none;margin-top:10px;">
+                    <strong>Way to go!</strong> You created that entry without a hitch.
+                </div>
+            </div>
+            <div class="col-md-8">
+                <h2>Your PID Entries</h2>
+                <p id="noEntryMessage" class="bg-info" style="padding:20px">Uh oh... You haven't written any PIDs yet. Basecamp Builder is feeling bored.</p>
+                <table id="entryTable" class="table table-hover" style="display:none;">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Date</th>
+                            <th>Author(s)</th>
+                            <th>Title</th>
+                            <th>Class?</th>
+                            <th>Class Level</th>
+                            <th>Class Tags</th>
+                        </tr>
+                    </thead>
+                    <tbody id="entryRows">
+                    </tbody>
+                    <script id="entry-row-template" type="text/x-handlebars-template">
+                        <tr data-entry-id="{{id}}">
+                            <td>{{startString}}</td>
+                            <td>{{duration}}</td>
+                            <td>{{description}}</td>
+                            <td>{{tags}}</td>
+                            <td>
+                                <button style="float:none;" onclick="editEntry(this)" type="button" class="close" aria-label="Close" data-toggle="modal" data-target="#modalEdit"><span class="glyphicon glyphicon-pencil" aria-hidden="true"></span></button>&nbsp;
+                                <button style="float:none;" onclick="removeEntry(this)" type="button" class="close" aria-label="Close"><span class="glyphicon glyphicon-trash" aria-hidden="true"></span></button>
+                            </td>
+                        </tr>
+                    </script>
+                </table>
+            </div>
+        </div>
+        <!-- Modal window for editing entries -->
+        <div class="modal fade" id="modalEdit" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                        <h4 class="modal-title" id="myModalLabel">Edit Entry</h4>
+                    </div>
+                    <div class="modal-body">
+                        <form>
+                            <div class="form-group">
+                                <label for="editStart">Start (Date and Time)*</label>
+                                <input type="datetime-local" class="form-control" id="editStart" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="editEnd">End (Date and Time)*</label>
+                                <input type="datetime-local" class="form-control" id="editEnd" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="editDescription">Description</label>
+                                <textarea class="form-control" rows="3" id="editDescription"></textarea>
+                            </div>
+                            <div class="form-group">
+                                <label for="editTags">Tags (Separate tags with commas) </label>
+                                <input type="text" class="form-control" id="editTags">
+                            </div>
+                        </form>
+                        <p><em>*Required</em></p>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                        <button id="editSaveButton" type="button" class="btn btn-primary" data-dismiss="modal">Save changes</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Modal window for user registration -->
+        <div class="modal fade" id="modalRegister" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                        <h4 class="modal-title" id="myModalLabel">Create an Account</h4>
+                    </div>
+                    <div class="modal-body">
+                        <form id="userForm">
+                            <div class="form-group">
+                                <label for="userInputName">First Name</label>
+                                <input type="text" class="form-control" id="userInputName" placeholder="First Name">
+                            </div>
+                            <div class="form-group">
+                                <label for="userInputEmail">Email address</label>
+                                <input type="email" class="form-control" id="userInputEmail" placeholder="Email">
+                            </div>
+                            <div class="form-group">
+                                <label for="userInputPassword">Password</label>
+                                <input type="password" class="form-control" id="userInputPassword" placeholder="Password">
+                            </div>
+                        </form>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                        <button id="saveNewUser" type="button" class="btn btn-primary" data-dismiss="modal" onclick="registerNewUser()">Submit</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <hr>
+        <footer>
+            <p>&copy; Tracker Tracktor 2015</p>
+        </footer>
+    </div>
+    <!-- /container -->
 
   <!-- Libraries -->
   <script src="components/underscore/underscore-min.js"></script>
@@ -20,8 +174,8 @@
   <script src="components/handlebars/handlebars.min.js"></script>
 
   <!-- Models/Collections -->
-  <script src="js/models/WeatherEntry.js"></script>
-  <script src="js/collections/Weather.js"></script>
+  <script src="js/models/PIDEntry.js"></script>
+  <script src="js/collections/SID.js"></script>
 
   <!-- Views -->
   <script src="js/views/AppView.js"></script>
@@ -32,6 +186,7 @@
 
   <!-- Launch App -->
   <script src="js/app.js"></script>
-</body>
 
-</html>
+
+
+</body></html>
