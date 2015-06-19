@@ -5,7 +5,7 @@ var path = require('path');
 app.set('port', process.env.PORT || 3000 );
 
 app.use('/js',         express.static( path.join(__dirname, '../client/js') ));
-app.use('/components', express.static( path.join(__dirname, '../client/bower_components') ));
+app.use('/components', express.static( path.join(__dirname, '../client/components') ));
 app.use('/css',        express.static( path.join(__dirname, '../client/css') ));
 
 app.get('/',function(req,res){
