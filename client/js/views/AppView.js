@@ -14,14 +14,20 @@ var AppView = Backbone.View.extend({
       collection: this.collection
     });
 
+    this.formDiv = $('#input-form');
+    this.listDiv = $('#entryRows');
+
     this.render();
   },
 
   render: function() {
 
-    this.$el.append([
+    this.formDiv.append([
       this.title.$el,
       this.input.$el,
+    ]);
+
+    this.listDiv.append([
       this.list.$el
     ]);
 

@@ -1,8 +1,8 @@
 var EntryView = Backbone.View.extend({
 
-  className: 'entry',
+  tagName: 'tr',
 
-  template: _.template('<p>ID: <%= id %>  Date: <%= date %>  Author(s): <%= authors %>  Title: <%= title %>  isClass: <%= isClass %>  classLevel: <%= classLevel %>  classTags: <%= classTags %></p>'),
+  template: _.template('<td><%= id %></td><td><%= date %></td><td><%= authors %></td><td><%= title %></td><td><%= isClass %></td><td><%= classLevel %></td><td><%= classTags %></td><td><button style="float:none;" onclick="editEntry(this)" type="button" class="close" aria-label="Close" data-toggle="modal" data-target="#modalEdit"><span class="glyphicon glyphicon-pencil" aria-hidden="true"></span></button>&nbsp;<button style="float:none;" onclick="removeEntry(this)" type="button" class="close" aria-label="Close"><span class="glyphicon glyphicon-trash" aria-hidden="true"></span></button></td>'),
 
   initialize: function() {
     this.render();

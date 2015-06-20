@@ -12,6 +12,7 @@
 </head>
 
 <body>
+  <div id="app">
     <nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
         <div class="container">
             <div class="navbar-header">
@@ -50,9 +51,7 @@
         <!-- Example row of columns -->
         <div class="row">
             <div class="col-md-4">
-              <div id="container">
-                <div id="app"></div>
-              </div>
+              <div id="input-form"></div>
                 <button onclick="addEntry()" class="btn btn-primary">Save New Entry</button>
                 <div id="dateWarning" class="alert alert-danger" role="alert" style="display:none;margin-top:10px;">
                     <strong>Warning!</strong> Somethings wrong with those start and end dates.
@@ -63,17 +62,17 @@
             </div>
             <div class="col-md-8">
                 <h2>Your PID Entries</h2>
-                <p id="noEntryMessage" class="bg-info" style="padding:20px">Uh oh... You haven't written any PIDs yet. Basecamp Builder is feeling bored.</p>
-                <table id="entryTable" class="table table-hover" style="display:none;">
+                <table id="entryTable" class="table table-hover">
                     <thead>
                         <tr>
                             <th>ID</th>
                             <th>Date</th>
                             <th>Author(s)</th>
                             <th>Title</th>
-                            <th>Class?</th>
-                            <th>Class Level</th>
-                            <th>Class Tags</th>
+                            <th>Class</th>
+                            <th>Level</th>
+                            <th>Tags</th>
+                            <th>Edit</th>
                         </tr>
                     </thead>
                     <tbody id="entryRows">
@@ -166,12 +165,22 @@
         </footer>
     </div>
     <!-- /container -->
+  
+  </div>
+  <!-- /app -->
 
   <!-- Libraries -->
   <script src="components/underscore/underscore-min.js"></script>
   <script src="components/jquery/dist/jquery.min.js"></script>
   <script src="components/backbone/backbone-min.js"></script>
   <script src="components/handlebars/handlebars.min.js"></script>
+  <script src="lib/jquery-ui.js"></script>
+  <script>
+  $(function() {
+    $( "#entryRows" ).sortable();
+    $( "#entryRows" ).disableSelection();
+  });
+  </script>
 
   <!-- Models/Collections -->
   <script src="js/models/PIDEntry.js"></script>
@@ -188,5 +197,5 @@
   <script src="js/app.js"></script>
 
 
-
+  
 </body></html>
