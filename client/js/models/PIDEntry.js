@@ -1,7 +1,11 @@
+var idCounter = 1;
+
 var PIDEntry = Backbone.Model.extend({
 
-  defaults: {
+  defaults: {  
     id: '',
+    basecampId: '',
+    pid: '',
     date: '',
     authors: '',
     title: '',
@@ -10,6 +14,9 @@ var PIDEntry = Backbone.Model.extend({
     classTags: ''
   },
 
-  initialize: function() {},
+  initialize: function() {
+    this.set('id', idCounter);
+    idCounter++;
+  },
 
 });
