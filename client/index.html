@@ -1,7 +1,9 @@
-<html lang="en"><head>
-  <meta charset="UTF-8">
-  <title>Basecamp PID Builder</title>
-  <link rel="stylesheet" href="css/bootstrap.min.css">
+<html ng-app="pidApp" lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Basecamp PID Builder</title>
+    <link rel="stylesheet" href="css/bootstrap.min.css">
     <style>
     body {
         padding-top: 50px;
@@ -9,193 +11,264 @@
     }
     </style>
     <link rel="stylesheet" href="css/bootstrap-theme.min.css">
+    <script src="http://cdnjs.cloudflare.com/ajax/libs/angular.js/1.2.1/angular.min.js"></script>
+    <script>
+    var pidApp = angular.module('pidApp', []);
+    
+    pidApp.controller('PidCtrl', function($scope) {
+        $scope.pids = [];
+
+        $scope.addPID = function() {
+            $scope.pids.push({
+                "id":$scope.pid,
+                "date":$scope.date,
+                "authors":$scope.authors,
+                "title":$scope.title,
+                "isClass":$scope.isClass,
+                "classLevel":$scope.classLevel,
+                "classTags":$scope.classTags
+            });
+            $scope.pid = '';
+            $scope.date = '';
+            $scope.authors = '';
+            $scope.title = '';
+            $scope.isClass = '';
+            $scope.classLevel = '';
+            $scope.classTags = '';
+        };
+
+    });
+    </script>
 </head>
 
-<body>
-  <div id="app">
-    <nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+<body ng-controller="PidCtrl">
+    <div id="app">
+        <nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+            <div class="container">
+                <div class="navbar-header">
+                    <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+                        <span class="sr-only">Toggle navigation</span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </button>
+                    <a class="navbar-brand" href="#">Basecamp PID Builder</a>
+                </div>
+                <div id="navbar" class="navbar-collapse collapse">
+                    <div id="loggedOutNav">
+                        <form class="navbar-form navbar-right" role="form" name="loginForm">
+                            <div class="form-group">
+                                <input id="logInEmail" type="text" placeholder="Email" class="form-control">
+                            </div>
+                            <div class="form-group">
+                                <input id="logInPass" type="password" placeholder="Password" class="form-control">
+                            </div>
+                            <button type="button" class="btn btn-success" onclick="logIn()">Sign in</button>
+                        </form>
+                    </div>
+                    <div id="loggedInNav" style="display:none">
+                        <form class="navbar-form navbar-right" role="form">
+                            <p class="navbar-text" style="margin-top:7px;margin-bottom:7px;">Welcome!</p>
+                            &nbsp;&nbsp;&nbsp;
+                            <button type="button" class="btn btn-danger" onclick="logOut()">Log Out</button>
+                        </form>
+                    </div>
+                </div>
+                <!--/.navbar-collapse -->
+            </div>
+        </nav>
         <div class="container">
-            <div class="navbar-header">
-                <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
-                    <span class="sr-only">Toggle navigation</span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                </button>
-                <a class="navbar-brand" href="#">Basecamp PID Builder</a>
-            </div>
-            <div id="navbar" class="navbar-collapse collapse">
-                <div id="loggedOutNav">
-                    <form class="navbar-form navbar-right" role="form" name="loginForm">
+            <!-- Example row of columns -->
+            <div class="row">
+                <div class="col-md-4">
+                    <h2>Create a New PID</h2>
+                    <form ng-submit="addPID()">
                         <div class="form-group">
-                            <input id="logInEmail" type="text" placeholder="Email" class="form-control">
+                            <label for="pid">
+                                ID
+                            </label>
+                            <input type="text" class="form-control" ng-model="pid" name="pid">
                         </div>
                         <div class="form-group">
-                            <input id="logInPass" type="password" placeholder="Password" class="form-control">
+                            <label for="date">
+                                Date
+                            </label>
+                            <input type="date" class="form-control" ng-model="date" name="date">
                         </div>
-                        <button type="button" class="btn btn-success" onclick="logIn()">Sign in</button>
+                         <div class="form-group">
+                            <label for="title">
+                                Title
+                            </label>
+                            <input type="text" class="form-control" ng-model="title" name="title">
+                        </div>
+                        <div class="form-group">
+                            <label for="authors">
+                                Authors
+                            </label>
+                            <input type="text" class="form-control" ng-model="authors" name="authors">
+                        </div>
+                        <div class="form-group">
+                            <label for="isClass">
+                                Is a Class?
+                            </label>
+                            <input type="text" class="form-control" ng-model="isClass" name="isClass">
+                        </div>
+                        <div class="form-group">
+                            <label for="classLevel">
+                                Class Level
+                            </label>
+                            <input type="text" class="form-control" ng-model="classLevel" name="classLevel">
+                        </div>
+                        <div class="form-group">
+                            <label for="classTags">
+                                Class Tags
+                            </label>
+                            <input type="text" class="form-control" ng-model="classTags" name="classTags">
+                        </div>
+                       
+                        <button type="submit" name="submit" class="btn btn-primary save-new-entry">Save New Entry</button>
                     </form>
+                    <div id="dateWarning" class="alert alert-danger" role="alert" style="display:none;margin-top:10px;">
+                        <strong>Warning!</strong> Somethings wrong with those start and end dates.
+                    </div>
+                    <div id="entrySuccess" class="alert alert-success" role="alert" style="display:none;margin-top:10px;">
+                        <strong>Way to go!</strong> You created that entry without a hitch.
+                    </div>
                 </div>
-                <div id="loggedInNav" style="display:none">
-                    <form class="navbar-form navbar-right" role="form">
-                        <p class="navbar-text" style="margin-top:7px;margin-bottom:7px;">Welcome!</p>
-                        &nbsp;&nbsp;&nbsp;
-                        <button type="button" class="btn btn-danger" onclick="logOut()">Log Out</button>
-                    </form>
-                </div>
-            </div>
-            <!--/.navbar-collapse -->
-        </div>
-    </nav>
-    <div class="container">
-        <!-- Example row of columns -->
-        <div class="row">
-            <div class="col-md-4">
-              <div id="input-form"></div>
-                <button onclick="addEntry()" class="btn btn-primary">Save New Entry</button>
-                <div id="dateWarning" class="alert alert-danger" role="alert" style="display:none;margin-top:10px;">
-                    <strong>Warning!</strong> Somethings wrong with those start and end dates.
-                </div>
-                <div id="entrySuccess" class="alert alert-success" role="alert" style="display:none;margin-top:10px;">
-                    <strong>Way to go!</strong> You created that entry without a hitch.
-                </div>
-            </div>
-            <div class="col-md-8">
-                <h2>Your PID Entries</h2>
-                <table id="entryTable" class="table table-hover">
-                    <thead>
-                        <tr>
-                            <th>ID</th>
-                            <th>Date</th>
-                            <th>Author(s)</th>
-                            <th>Title</th>
-                            <th>Class</th>
-                            <th>Level</th>
-                            <th>Tags</th>
-                            <th>Edit</th>
-                        </tr>
-                    </thead>
-                    <tbody id="entryRows">
-                    </tbody>
-                    <script id="entry-row-template" type="text/x-handlebars-template">
-                        <tr data-entry-id="{{id}}">
-                            <td>{{startString}}</td>
-                            <td>{{duration}}</td>
-                            <td>{{description}}</td>
-                            <td>{{tags}}</td>
+                <div class="col-md-8">
+                    <h2>Your PID Entries</h2>
+                    <table id="entryTable" class="table table-hover">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Date</th>
+                                <th>Author(s)</th>
+                                <th>Title</th>
+                                <th>Class</th>
+                                <th>Level</th>
+                                <th>Tags</th>
+                                <th>Edit</th>
+                            </tr>
+                        </thead>
+                        <tbody id="entryRows">
+                          <tr ng-repeat="pid in pids">
                             <td>
-                                <button style="float:none;" onclick="editEntry(this)" type="button" class="close" aria-label="Close" data-toggle="modal" data-target="#modalEdit"><span class="glyphicon glyphicon-pencil" aria-hidden="true"></span></button>&nbsp;
-                                <button style="float:none;" onclick="removeEntry(this)" type="button" class="close" aria-label="Close"><span class="glyphicon glyphicon-trash" aria-hidden="true"></span></button>
+                                {{pid.id}}
                             </td>
-                        </tr>
-                    </script>
-                </table>
+                            <td>
+                                {{pid.date}}
+                            </td>
+                            <td>
+                                {{pid.authors}}
+                            </td>
+                            <td>
+                                {{pid.title}}
+                            </td>
+                            <td>
+                                {{pid.isClass}}
+                            </td>
+                            <td>
+                                {{pid.classLevel}}
+                            </td>
+                            <td>
+                                {{pid.classTags}}
+                            </td>
+                            <td>
+                                <button style="float:none;" type="button" class="close edit" aria-label="Close" data-toggle="modal" data-target="#modalEdit"><span class="glyphicon glyphicon-pencil" aria-hidden="true"></span></button>&nbsp;
+                                <button style="float:none;" type="button" class="close remove" aria-label="Close"><span class="glyphicon glyphicon-trash" aria-hidden="true"></span></button>
+                            </td>
+                          </tr>
+                        </tbody>
+                    </table>
+                </div>
             </div>
-        </div>
-        <!-- Modal window for editing entries -->
-        <div class="modal fade" id="modalEdit" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-            <div class="modal-dialog">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                        <h4 class="modal-title" id="myModalLabel">Edit Entry</h4>
-                    </div>
-                    <div class="modal-body">
-                        <form>
-                            <div class="form-group">
-                                <label for="editStart">Start (Date and Time)*</label>
-                                <input type="datetime-local" class="form-control" id="editStart" required>
-                            </div>
-                            <div class="form-group">
-                                <label for="editEnd">End (Date and Time)*</label>
-                                <input type="datetime-local" class="form-control" id="editEnd" required>
-                            </div>
-                            <div class="form-group">
-                                <label for="editDescription">Description</label>
-                                <textarea class="form-control" rows="3" id="editDescription"></textarea>
-                            </div>
-                            <div class="form-group">
-                                <label for="editTags">Tags (Separate tags with commas) </label>
-                                <input type="text" class="form-control" id="editTags">
-                            </div>
-                        </form>
-                        <p><em>*Required</em></p>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                        <button id="editSaveButton" type="button" class="btn btn-primary" data-dismiss="modal">Save changes</button>
+            <!-- Modal window for editing entries -->
+            <div class="modal fade" id="modalEdit" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                            <h4 class="modal-title" id="myModalLabel">Edit Entry</h4>
+                        </div>
+                        <div class="modal-body">
+                            <form>
+                                <div class="form-group">
+                                    <label for="editStart">Start (Date and Time)*</label>
+                                    <input type="datetime-local" class="form-control" id="editStart" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="editEnd">End (Date and Time)*</label>
+                                    <input type="datetime-local" class="form-control" id="editEnd" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="editDescription">Description</label>
+                                    <textarea class="form-control" rows="3" id="editDescription"></textarea>
+                                </div>
+                                <div class="form-group">
+                                    <label for="editTags">Tags (Separate tags with commas) </label>
+                                    <input type="text" class="form-control" id="editTags">
+                                </div>
+                            </form>
+                            <p><em>*Required</em></p>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                            <button id="editSaveButton" type="button" class="btn btn-primary" data-dismiss="modal">Save changes</button>
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
-        <!-- Modal window for user registration -->
-        <div class="modal fade" id="modalRegister" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-            <div class="modal-dialog">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                        <h4 class="modal-title" id="myModalLabel">Create an Account</h4>
-                    </div>
-                    <div class="modal-body">
-                        <form id="userForm">
-                            <div class="form-group">
-                                <label for="userInputName">First Name</label>
-                                <input type="text" class="form-control" id="userInputName" placeholder="First Name">
-                            </div>
-                            <div class="form-group">
-                                <label for="userInputEmail">Email address</label>
-                                <input type="email" class="form-control" id="userInputEmail" placeholder="Email">
-                            </div>
-                            <div class="form-group">
-                                <label for="userInputPassword">Password</label>
-                                <input type="password" class="form-control" id="userInputPassword" placeholder="Password">
-                            </div>
-                        </form>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
-                        <button id="saveNewUser" type="button" class="btn btn-primary" data-dismiss="modal" onclick="registerNewUser()">Submit</button>
+            <!-- Modal window for user registration -->
+            <div class="modal fade" id="modalRegister" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                            <h4 class="modal-title" id="myModalLabel">Create an Account</h4>
+                        </div>
+                        <div class="modal-body">
+                            <form id="userForm">
+                                <div class="form-group">
+                                    <label for="userInputName">First Name</label>
+                                    <input type="text" class="form-control" id="userInputName" placeholder="First Name">
+                                </div>
+                                <div class="form-group">
+                                    <label for="userInputEmail">Email address</label>
+                                    <input type="email" class="form-control" id="userInputEmail" placeholder="Email">
+                                </div>
+                                <div class="form-group">
+                                    <label for="userInputPassword">Password</label>
+                                    <input type="password" class="form-control" id="userInputPassword" placeholder="Password">
+                                </div>
+                            </form>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                            <button id="saveNewUser" type="button" class="btn btn-primary" data-dismiss="modal" onclick="registerNewUser()">Submit</button>
+                        </div>
                     </div>
                 </div>
             </div>
+            <hr>
+            <footer>
+                <p>&copy; Tracker Tracktor 2015</p>
+            </footer>
         </div>
-        <hr>
-        <footer>
-            <p>&copy; Tracker Tracktor 2015</p>
-        </footer>
+        <!-- /container -->
     </div>
-    <!-- /container -->
-  
-  </div>
-  <!-- /app -->
+    <!-- /app -->
 
-  <!-- Libraries -->
-  <script src="components/underscore/underscore-min.js"></script>
-  <script src="components/jquery/dist/jquery.min.js"></script>
-  <script src="components/backbone/backbone-min.js"></script>
-  <script src="components/handlebars/handlebars.min.js"></script>
-  <script src="lib/jquery-ui.js"></script>
-  <script>
-  $(function() {
-    $( "#entryRows" ).sortable();
-    $( "#entryRows" ).disableSelection();
-  });
-  </script>
+    <!-- Libraries -->
+    <script src="components/underscore/underscore-min.js"></script>
+    <script src="components/jquery/dist/jquery.min.js"></script>
+    <script src="lib/jquery-ui.js"></script>
+    <script src="lib/bootstrap.min.js"></script>
+    <script>
+    $(function() {
+        $("#entryRows").sortable();
+        $("#entryRows").disableSelection();
+    });
+    </script>
+</body>
 
-  <!-- Models/Collections -->
-  <script src="js/models/PIDEntry.js"></script>
-  <script src="js/collections/SID.js"></script>
-
-  <!-- Views -->
-  <script src="js/views/AppView.js"></script>
-  <script src="js/views/TitleView.js"></script>
-  <script src="js/views/InputView.js"></script>
-  <script src="js/views/ListView.js"></script>
-  <script src="js/views/EntryView.js"></script>
-
-  <!-- Launch App -->
-  <script src="js/app.js"></script>
-
-
-  
-</body></html>
+</html>
